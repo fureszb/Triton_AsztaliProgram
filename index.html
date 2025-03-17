@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triton-Szolgáltatási Adatlap</title>
+    <link rel="icon" type="image/x-icon" href="/images/tritonLogo.webp">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/validacio.js"></script>
+    <script src="js/UjErtesitendo.js"></script>
+    <script src="js/szamlazasiAdatok.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+    <header>
+        <div id="alertContainer" class="mb-4"></div>
+    </header>
+    <main>
+        <section>
+            <div class="container card-0 justify-content-center">
+                <div class="row justify-content-center mb-5 fejlec flex-md-nowrap align-items-center">
+                    <div class="col-auto order-md-1 order-1 mb-4 mb-md-0">
+                        <div class="kep">
+                            <img src="images/tritonLogo.webp" alt="Triton Logo"
+                                class="img-fluid d-block mx-auto logo-filter eltunik" style="max-height: 130px;">
+                        </div>
+                    </div>
+
+                    <div class="col-md-8 col-12 order-md-2 order-3 text-center text-md-left">
+                        <h3 class="display-5 fw-bold mb-3 text-primary">SZOLGÁLTATÁSI ADATLAP</h3>
+                        <p class="lead mb-md-0 text-muted">Kérjük töltse ki az alábbi űrlapot szolgáltatási igényeinek
+                            rögzítéséhez</p>
+                    </div>
+
+                    <div class="col-auto order-md-3 order-2 mt-3 mt-md-0">
+                        <div class="kep">
+                            <img src="images/tritonLogo.webp" alt="Triton Logo"
+                                class="img-fluid d-block mx-auto logo-filter" style="max-height: 130px;">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row justify-content-center round">
+                    <div class="col-lg-10 col-md-12">
+                        <div class="card shadow-lg card-1">
+                            <div class="card-body inner-card">
+                                <form action="php/process.php" method="POST" novalidate>
+                                    <div class="row justify-content-center">
+                                        <!-- Bal oldali oszlop -->
+                                        <div class="col-lg-5 col-md-6 col-sm-12">
+                                            <h2>Szerződő adatai</h2>
+                                            <hr class="elvalaszto">
+                                            <div class="form-group">
+                                                <label for="szerzodo_neve">Szerződő neve:</label>
+                                                <input type="text" name="szerzodo_neve"
+                                                    class="form-control modern-input" id="szerzodo_neve" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="anyja_neve">Anyja neve:</label>
+                                                <input type="text" name="anyja_neve" id="anyja_neve"
+                                                    class="form-control modern-input" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="szig_szam">Személyi igazolvány szám:</label>
+                                                <input type="text" id="szig_szam" name="szig_szam"
+                                                    class="form-control modern-input" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="cime">Címe:</label>
+                                                <input type="text" id="cime" name="cime"
+                                                    class="form-control modern-input" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="telefon_szama">Telefon száma:</label>
+                                                <input type="text" id="telefon_szama" name="telefon_szama"
+                                                    class="form-control modern-input" required>
+                                            </div>
+                                            <h2>Cég adatai</h2>
+                                            <hr class="elvalaszto">
+                                            <div class="form-group">
+                                                <label for="ceges_szerzodes">Céges szerződés?</label>
+                                                <select id="ceges_szerzodes" name="ceges_szerzodes"
+                                                    class="form-control modern-select" required
+                                                    onchange="toggleCegAdatok()">
+                                                    <option value="" disabled selected>-- Válasszon --</option>
+                                                    <option value="nem">Nem</option>
+                                                    <option value="igen">Igen</option>
+                                                </select>
+                                            </div>
+
+                                            <div id="ceg_adatok" class="hidden">
+                                                <div class="form-group">
+                                                    <label for="adoszam">Adószám:</label>
+                                                    <input id="adoszam" type="text" name="adoszam"
+                                                        class="form-control modern-input" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="cegjegyzek_szam">Cégjegyzék szám:</label>
+                                                    <input id="cegjegyzek_szam" type="text" name="cegjegyzek_szam"
+                                                        class="form-control modern-input" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="bankszamla_szam" class="form-label">Bankszámla
+                                                        szám:</label>
+                                                    <input id="bankszamla_szam" type="text" name="bankszamla_szam"
+                                                        class="form-control modern-input" required>
+                                                </div>
+                                            </div>
+
+                                            <h2>Egyéb adatok</h2>
+                                            <hr class="elvalaszto">
+                                            <div class="form-group">
+                                                <label for="email" class="form-label">E-mail cím:</label>
+                                                <input id="email" type="email" name="email"
+                                                    class="form-control modern-input" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="riasztokozpont_tipusa" class="form-label">Riasztó központ
+                                                    típusa:</label>
+                                                <input id="riasztokozpont_tipusa" type="text"
+                                                    name="riasztokozpont_tipusa" class="form-control modern-input">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="telepito-nev" class="form-label">Telepítő neve:</label>
+                                                <input id="telepito-nev" type="text" name="telepito-nev"
+                                                    class="form-control modern-input">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="telepito-telefonszam" class="form-label">Telepítő
+                                                    telefonszáma:</label>
+                                                <input id="telepito-telefonszam" type="text" name="telepito-telefonszam"
+                                                    class="form-control modern-input">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="kutya" class="form-label">Kutya:</label>
+                                                <select name="kutya" id="kutya" class="form-control modern-select"
+                                                    required>
+                                                    <option value="" disabled selected>-- Válasszon --</option>
+                                                    <option value="van">Van</option>
+                                                    <option value="nincs">Nincs</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="kapu_kulcs" class="form-label">Kapu kulcs:</label>
+                                                <input id="kapu_kulcs" type="text" name="kapu_kulcs"
+                                                    class="form-control modern-input">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="megjegyzes" class="form-label">Megjegyzés:</label>
+                                                <textarea id="megjegyzes" name="megjegyzes"
+                                                    class="form-control megjegyzes modern-input" rows="3"></textarea>
+                                            </div>
+
+                                        </div>
+
+                                        <!-- Jobb oldali oszlop -->
+                                        <div class="col-lg-5 col-md-6 col-sm-12">
+
+                                            <h2> Védett objektum adatai</h2>
+                                            <hr class="elvalaszto">
+                                            <div class="form-group">
+                                                <label for="vedett_objektum_neve">Védett objektum neve:</label>
+                                                <input id="vedett_objektum_neve" type="text" name="vedett_objektum_neve"
+                                                    class="form-control modern-input" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="objektum_cime" class="form-label">Objektum címe:</label>
+                                                <input id="objektum_cime" type="text" name="objektum_cime"
+                                                    class="form-control modern-input" required>
+                                            </div>
+                                            <h2>Számlázási adatok</h2>
+                                            <hr class="elvalaszto">
+                                            <div class="form-group">
+                                                <label for="szamlara_irando_nev" class="form-label">Számlára írandó
+                                                    név:</label>
+                                                <input type="text" name="szamlara_irando_nev" id="szamlara_irando_nev"
+                                                    class="form-control modern-input" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="szamlara_irando_cim" class="form-label">Számlára írandó
+                                                    cím:</label>
+                                                <input type="text" name="szamlara_irando_cim" id="szamlara_irando_cim"
+                                                    class="form-control modern-input" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="postazasi_cim" class="form-label">Postázási cím:</label>
+                                                <input type="text" name="postazasi_cim" id="postazasi_cim"
+                                                    class="form-control modern-input" required>
+                                            </div>
+                                            <div class="form-group mb-4">
+                                                <div class="custom-checkbox">
+                                                    <input type="checkbox" class="custom-checkbox-input"
+                                                        id="sameAsContractor" name="sameAsContractor">
+                                                    <label class="custom-checkbox-label" for="sameAsContractor">
+                                                        <span class="checkmark">
+                                                            <svg viewBox="0 0 12 10">
+                                                                <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                                            </svg>
+                                                        </span>
+                                                        A számlázási adatok megegyeznek a szerződő adataival
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="ertesitendo-container">
+                                                <h2>Értesítendő személyek</h2>
+                                                <hr class="elvalaszto">
+
+                                                <div class="ertesitendo-item mb-4">
+                                                    <div class="g-3">
+                                                        <div class="form-group">
+                                                            <label for="ertesitendo_szemely_neve[]">Értesítendő személy
+                                                                neve:</label>
+                                                            <input id="ertesitendo_szemely_neve[]" type="text"
+                                                                name="ertesitendo_szemely_neve[]"
+                                                                class="form-control modern-input" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="ertesitendo_szemely_telefon[]">Értesítendő
+                                                                személy telefon száma:</label>
+                                                            <input id="ertesitendo_szemely_telefon[]" type="text"
+                                                                name="ertesitendo_szemely_telefon[]"
+                                                                class="form-control modern-input" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="uj-ertesitendo">
+                                                    <button type="button"
+                                                        class="btn btn-outline-primary btn-sm add-ertesitendo">
+                                                        <i class="bi bi-plus-circle me-2"></i>Új értesítendő hozzáadása
+                                                    </button>
+                                                </div>
+                                                <h2>Jelszavak</h2>
+                                                <hr class="elvalaszto">
+                                                <div class="form-group">
+                                                    <label for="jelszo" class="form-label">Lemondó kód:</label>
+                                                    <input id="jelszo" type="text" name="jelszo"
+                                                        class="form-control modern-input" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="vendeg_jelszo" class="form-label">Vendég vagy
+                                                        alkalmazotti
+                                                        jelszó:</label>
+                                                    <input id="vendeg_jelszo" type="text" name="vendeg_jelszo"
+                                                        class="form-control modern-input">
+                                                </div>
+
+                                                <h2>Fizetési adatok</h2>
+                                                <hr class="elvalaszto">
+                                                <div class="form-group">
+                                                    <label for="fizetes_gyakorisaga" class="form-label">Fizetés
+                                                        gyakorisága:</label>
+                                                    <select name="fizetes_gyakorisaga"
+                                                        class="form-control modern-select" id="fizetes_gyakorisaga"
+                                                        required>
+                                                        <option value="" disabled selected>-- Válasszon --</option>
+                                                        <option value="havi">Havi</option>
+                                                        <option value="negyed_eves">1/4 éves</option>
+                                                        <option value="fel_eves">1/2 éves</option>
+                                                        <option value="eves">Éves</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="fizetes_modja">Fizetés módja:</label>
+                                                    <select id="fizetes_modja" name="fizetes_modja"
+                                                        class="form-control modern-select" required>
+                                                        <option value="" disabled selected>-- Válasszon --</option>
+                                                        <option value="kp_irodaban">KP irodában</option>
+                                                        <option value="atutalas">Átutalás</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <!-- Mentés gomb -->
+
+                                        <div class="d-grid mt-5">
+                                            <button type="submit" class="btn btn-lg triton-btn">
+                                                <span class="fw-bold h5">Adatok Mentése</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                    fill="currentColor" class="bi bi-cloud-arrow-up ms-2"
+                                                    viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd"
+                                                        d="M7.646 5.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708z" />
+                                                    <path
+                                                        d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383m.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-white mt-5 triton-footer">
+        <div class="container py-3 py-lg-5"> <!-- Kisebb padding telefonon -->
+            <div class="row g-3 g-lg-4"> <!-- Kisebb résköz telefonon -->
+                <!-- Kapcsolati információk -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <h4 class="text-primary mb-3">
+                        <i class="bi bi-telephone fs-6 me-2"></i> <!-- Kisebb ikon -->
+                        Kapcsolatok
+                    </h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <span class="text-primary d-block">24/7 Ügyfélszolgálat:</span>
+                            <a href="tel:+3624472372" class="text-white">+36 24 472 372</a>
+                        </li>
+                        <li class="mb-2">
+                            <span class="text-primary d-block">Technikai támogatás:</span>
+                            <a href="tel:+36209112558" class="text-white">+36 20 911 2558</a>
+                        </li>
+                        <li class="mb-2">
+                            <span class="text-primary d-block">Hiba bejelentés:</span>
+                            <a href="tel:+3611223344" class="text-danger">+36 1 122 3344</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Gyors linkek -->
+                <div class="col-12 col-md-6 col-lg-4 mt-4 mt-md-0"> <!-- Margó telefonon -->
+                    <h4 class="text-primary mb-3">
+                        <i class="bi bi-link-45deg fs-6 me-2"></i>
+                        Gyors elérés
+                    </h4>
+                    <div class="row">
+                        <div class="col-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><a href="#" class="text-white">ÁSZF</a></li>
+                                <li class="mb-2"><a href="#" class="text-white">Adatvédelem</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><a href="#" class="text-white">Szolgáltatások</a></li>
+                                <li class="mb-2"><a href="#" class="text-white">GYIK</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cégadatok -->
+                <div class="col-12 col-lg-4 mt-4 mt-lg-0 ps-lg-4"> <!-- Bal padding csak nagy képernyőkön -->
+                    <div class="ps-0 ps-lg-3"> <!-- Padding reset telefonon -->
+                        <h4 class="text-primary mb-3">
+                            <i class="bi bi-geo-alt fs-6 me-2"></i>
+                            Triton Security Kft.
+                        </h4>
+                        <p class="text-white-50 mb-1">2336 Dunavarsány</p>
+                        <p class="text-white-50 mb-1">Kossuth Lajos utca 23.</p>
+                        <p class="text-white-50">Adószám: 12345678-1-23</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="border-top border-primary mt-4 pt-3 text-center">
+                <p class="mb-0 text-white-50 small">&copy; 2025 Triton Security - Minden jog fenntartva</p>
+            </div>
+        </div>
+    </footer>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Cég adatok megjelenítése/elrejtése
+        function toggleCegAdatok() {
+            const cegAdatok = document.getElementById('ceg_adatok');
+            const cegSzerzodes = document.getElementById('ceges_szerzodes').value;
+
+            if (cegSzerzodes === 'igen') {
+                cegAdatok.classList.remove('hidden');
+                // Kötelezővé tesszük a cég adatokat
+                cegAdatok.querySelectorAll('input').forEach(input => input.required = true);
+            } else {
+                cegAdatok.classList.add('hidden');
+                // Nem kötelező a cég adatok kitöltése
+                cegAdatok.querySelectorAll('input').forEach(input => input.required = false);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szolgáltatási Adatlap</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <div class="container py-5">
+        <h1 class="text-center mb-4">Szolgáltatási Adatlap</h1>
+        <div class="card shadow p-4">
+            <form action="process.php" method="POST" onsubmit="return validateForm()">
+                <div class="row g-3">
+                    <!-- Szerződő adatai -->
+                    <div class="col-md-6">
+                        <label class="form-label">Szerződő neve:</label>
+                        <input type="text" name="szerzodo_neve" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Lánykori neve:</label>
+                        <input type="text" name="lanykori_neve" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Anyja neve:</label>
+                        <input type="text" name="anyja_neve" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Címe:</label>
+                        <input type="text" name="cime" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Személyi igazolvány szám:</label>
+                        <input type="text" name="szig_szam" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Telefon száma:</label>
+                        <input type="text" name="telefon_szama" class="form-control" required>
+                    </div>
+
+                    <!-- Cég adatai (csak akkor látható, ha a felhasználó kiválasztja, hogy céges szerződés) -->
+                    <div class="col-md-6">
+                        <label class="form-label">Céges szerződés?</label>
+                        <select id="ceges_szerzodes" name="ceges_szerzodes" class="form-control" required
+                            onchange="toggleCegAdatok()">
+                            <option value="">-- Válasszon --</option>
+                            <option value="nem">Nem</option>
+                            <option value="igen">Igen</option>
+                        </select>
+                    </div>
+
+                    <!-- Cég adatai (elrejtve alapból) -->
+                    <div id="ceg_adatok" class="hidden">
+                        <div class="col-md-6">
+                            <label class="form-label">Adószám:</label>
+                            <input type="text" name="adoszam" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Cégjegyzék szám:</label>
+                            <input type="text" name="cegjegyzek_szam" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Bankszámla szám:</label>
+                            <input type="text" name="bankszamla_szam" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- Védett objektum adatai -->
+                    <div class="col-md-6">
+                        <label class="form-label">Védett objektum neve:</label>
+                        <input type="text" name="vedett_objektum_neve" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Objektum címe:</label>
+                        <input type="text" name="objektum_cime" class="form-control" required>
+                    </div>
+                   <!-- <div class="col-md-6">
+                        <label class="form-label">Objektum telefon száma:</label>
+                        <input type="text" name="objektum_telefon_szama" class="form-control">
+                    </div>-->
+
+                    <!-- Számlázási adatok -->
+                    <div class="col-md-6">
+                        <label class="form-label">Számlára írandó név:</label>
+                        <input type="text" name="szamlara_irando_nev" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Számlára írandó cím:</label>
+                        <input type="text" name="szamlara_irando_cim" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Postázási cím:</label>
+                        <input type="text" name="postazasi_cim" class="form-control">
+                    </div>
+
+                    <!-- Értesítendő személyek -->
+                    <div class="col-md-6">
+                        <label class="form-label">Értesítendő személy neve:</label>
+                        <input type="text" name="ertesitendo_szemely_neve" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Értesítendő személy telefon száma:</label>
+                        <input type="text" name="ertesitendo_szemely_telefon" class="form-control">
+                    </div>
+
+                    <!-- Jelszavak -->
+                    <div class="col-md-6">
+                        <label class="form-label">Jelszó:</label>
+                        <input type="text" name="jelszo" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Vendég vagy alkalmazotti jelszó:</label>
+                        <input type="text" name="vendeg_jelszo" class="form-control">
+                    </div>
+
+                    <!-- Fizetési adatok -->
+                    <div class="col-md-6">
+                        <label class="form-label">Fizetés gyakorisága:</label>
+                        <select name="fizetes_gyakorisaga" class="form-control" required>
+                            <option value="">-- Válasszon --</option>
+                            <option value="havi">Havi</option>
+                            <option value="negyed_eves">1/4 éves</option>
+                            <option value="fel_eves">1/2 éves</option>
+                            <option value="eves">Éves</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Fizetés módja:</label>
+                        <select name="fizetes_modja" class="form-control" required>
+                            <option value="">-- Válasszon --</option>
+                            <option value="kp_irodaban">KP irodában</option>
+                            <option value="atutalas">Átutalás</option>
+                        </select>
+                    </div>
+
+                    <!-- Egyéb adatok -->
+                    <div class="col-md-6">
+                        <label class="form-label">E-mail cím:</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Riasztó központ típusa:</label>
+                        <input type="text" name="riasztokozpont_tipusa" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Telepítő neve és telefonszáma:</label>
+                        <input type="text" name="telepito" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Kutya:</label>
+                        <select name="kutya" class="form-control">
+                            <option value="">-- Válasszon --</option>
+                            <option value="van">Van</option>
+                            <option value="nincs">Nincs</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Kapu kulcs:</label>
+                        <input type="text" name="kapu_kulcs" class="form-control">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Megjegyzés:</label>
+                        <textarea name="megjegyzes" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <!-- Mentés gomb -->
+                    <div class="col-12 text-center mt-4">
+                        <button type="submit" class="btn btn-primary">Adatok mentése</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Cég adatok megjelenítése/elrejtése
+        function toggleCegAdatok() {
+            const cegAdatok = document.getElementById('ceg_adatok');
+            const cegSzerzodes = document.getElementById('ceges_szerzodes').value;
+
+            if (cegSzerzodes === 'igen') {
+                cegAdatok.classList.remove('hidden');
+                // Kötelezővé tesszük a cég adatokat
+                cegAdatok.querySelectorAll('input').forEach(input => input.required = true);
+            } else {
+                cegAdatok.classList.add('hidden');
+                // Nem kötelező a cég adatok kitöltése
+                cegAdatok.querySelectorAll('input').forEach(input => input.required = false);
+            }
+        }
+
+        // Űrlap ellenőrzése
+        function validateForm() {
+            const cegSzerzodes = document.getElementById('ceges_szerzodes').value;
+            if (cegSzerzodes === 'igen') {
+                const cegAdatok = document.getElementById('ceg_adatok');
+                const inputs = cegAdatok.querySelectorAll('input');
+                for (const input of inputs) {
+                    if (!input.value.trim()) {
+                        alert('Kérjük, töltse ki a cég adatait!');
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,562 @@
+.card-0 {
+    min-height: 110vh;
+    background: linear-gradient(-20deg, rgb(255, 255, 255) 50%, #0275d8 50%);
+    color: white;
+    border: 0px;
+}
+
+.nav-link-custom {
+    transition: all 0.2s ease;
+}
+
+.nav-link-custom:hover {
+    transform: translateY(-2px);
+    background-color: #f8f9fa;
+}
+
+.brand-icon {
+    transition: transform 0.3s ease;
+}
+
+.brand-icon:hover {
+    transform: rotate(15deg);
+}
+
+.container {
+    padding-top: 100px !important;
+}
+
+.card-1 {
+    border-radius: 17px;
+    box-shadow: 2px 4px 15px 0px rgb(0, 0, 0, 0.5) !important;
+}
+
+input,
+select,
+textarea {
+    border: 1px solid lightgrey !important;
+    border-radius: 0px !important;
+}
+
+label {
+    font-weight: bolder !important;
+    font-size: 14px !important;
+}
+
+.text-white-50 {
+    color: white !important;
+}
+
+.alert.triton-alert {
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 0.75rem 1.25rem;
+    margin-top: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.card-0 {
+    min-height: 110vh;
+    background: linear-gradient(-20deg, rgb(255, 255, 255) 50%, #0275d8 50%);
+    color: white;
+    border: 0px;
+}
+
+p {
+    font-size: 15px;
+    line-height: 25px !important;
+    font-weight: 500;
+
+
+}
+
+.container {
+    padding-top: 100px !important;
+    border-radius: 20px;
+}
+
+
+
+.btn {
+    letter-spacing: 1px;
+}
+
+select:active {
+    box-shadow: none !important;
+    outline-width: 0 !important;
+
+}
+
+select:after {
+    box-shadow: none !important;
+    outline-width: 0 !important;
+
+}
+
+input,
+textarea {
+    padding: 10px 12px 10px 12px;
+    border: 1px solid lightgrey;
+    border-radius: 0px !important;
+    margin-bottom: 5px;
+    margin-top: 2px;
+    width: 100%;
+    box-sizing: border-box;
+    color: #2C3E50;
+    font-size: 14px;
+    letter-spacing: 1px;
+    resize: none;
+
+}
+
+select:focus,
+input:focus {
+    box-shadow: none !important;
+    border: 1px solid #2196F3 !important;
+    outline-width: 0 !important;
+    font-weight: 400
+}
+
+label {
+    margin-bottom: 2px;
+    font-weight: bolder;
+    font-size: 14px;
+}
+
+input:focus,
+textarea:focus {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: 1px solid #304FFE;
+    outline-width: 0
+}
+
+button:focus {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    outline-width: 0
+}
+
+.form-control {
+    height: calc(2em + .75rem + 3px);
+}
+
+.inner-card {
+    margin: 50px 0px 70px 0px;
+}
+
+.card-0 {
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.card-1 {
+    border-radius: 17px;
+    color: black;
+    box-shadow: 2px 4px 15px 0px rgb(0, 0, 0, 0.5) !important;
+}
+
+#file {
+    border: 2px dashed #92b0b3 !important;
+
+}
+
+.color input {
+    background-color: #f1f1f1;
+}
+
+h2 {
+    font-size: 1rem;
+    /* text-decoration: underline; */
+    color: #8b0000c7;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin: 48px 0px 20px 0px;
+    letter-spacing: 1px;
+}
+
+img {
+    width: 130px;
+}
+
+.fejlec {
+    align-items: center;
+}
+
+.elvalaszto {
+    opacity: 0.7;
+    background-color: red;
+    height: 2px;
+    border-radius: 50px;
+    color: red;
+}
+
+.megjegyzes {
+    height: 100px;
+}
+
+.d-grid {
+    margin-top: 3%;
+}
+
+@media (max-width: 768px) {
+    .fejlec {
+        flex-direction: column;
+        text-align: center !important;
+    }
+
+    .triton-footer .col-md-6 {
+        margin-top: 1.5rem;
+        /* Extra térköz oszlopok között */
+    }
+
+    .triton-footer h4 {
+        font-size: 1.1rem;
+        /* Címek kisebbek */
+    }
+
+    .triton-footer a {
+        font-size: 0.9rem;
+        /* Linkek kisebbek */
+    }
+}
+
+:root {
+    --triton-blue: #0275d8;
+    --triton-dark: #0b2c4d;
+    --triton-gradient: linear-gradient(135deg, #0275d8 0%, #0b2c4d 100%);
+}
+
+/* Fejléc Stílusok */
+.fejlec {
+    padding: 2rem 0;
+    backdrop-filter: blur(5px);
+}
+
+.logo-filter {
+    filter: drop-shadow(0 2px 4px rgba(11, 44, 77, 0.2));
+    transition: transform 0.3s ease;
+}
+
+.logo-filter:hover {
+    transform: scale(1.05);
+}
+
+/* Gomb Stílusok */
+.triton-btn {
+    background: var(--triton-gradient);
+    color: white !important;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+}
+
+.triton-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(2, 117, 216, 0.3);
+}
+
+.triton-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 5px 15px rgba(2, 117, 216, 0.2);
+}
+
+.triton-btn::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+            transparent 25%,
+            rgba(255, 255, 255, 0.1) 50%,
+            transparent 75%);
+    animation: shine 3s infinite;
+}
+
+.text-primary {
+    color: white !important;
+}
+
+.fejlec p {
+    color: white !important;
+}
+
+.triton-footer {
+    background: linear-gradient(160deg,
+            #0275d8 20%,
+            #0b2c4d 100%) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.triton-footer::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -20%;
+    width: 150%;
+    height: 150%;
+    background: rgba(255, 255, 255, 0.03);
+    transform: rotate(15deg);
+}
+
+.triton-footer a {
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.triton-footer a:hover {
+    color: #0275d8 !important;
+    padding-left: 5px;
+}
+
+.border-primary {
+    border-color: #0275d8 !important;
+}
+
+body>footer>div>div.row.g-3.g-lg-4>div.col-12.col-md-6.col-lg-4.mt-4.mt-md-0 {
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+}
+
+body>footer>div>div.row.g-3.g-lg-4 {
+    text-align: center;
+    align-items: center;
+}
+
+footer li a {
+    cursor: pointer !important;
+}
+
+/* CSS stílusok */
+.custom-checkbox {
+    position: relative;
+    padding-left: 32px;
+    margin-bottom: 15px;
+}
+
+.custom-checkbox-input {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+}
+
+.custom-checkbox-label {
+    cursor: pointer;
+    position: relative;
+    font-size: 16px;
+    color: #2C3E50;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.checkmark {
+    position: absolute;
+    left: -32px;
+    height: 24px;
+    width: 24px;
+    border: 2px solid #0275d8;
+    border-radius: 6px;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.checkmark svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: white;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Hover állapot */
+.custom-checkbox-label:hover .checkmark {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(2, 117, 216, 0.2);
+}
+
+/* Checked állapot */
+.custom-checkbox-input:checked~.custom-checkbox-label .checkmark {
+    background-color: #0275d8;
+    border-color: #0275d8;
+}
+
+.custom-checkbox-input:checked~.custom-checkbox-label .checkmark svg {
+    opacity: 1;
+}
+
+/* Fókusz állapot */
+.custom-checkbox-input:focus-visible~.custom-checkbox-label .checkmark {
+    outline: 2px solid #0275d8;
+    outline-offset: 2px;
+}
+
+/* Letiltott állapot */
+.custom-checkbox-input:disabled~.custom-checkbox-label {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Modern input stílusok */
+.modern-input {
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    padding: 12px 16px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #ffffff;
+    font-size: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.modern-input:focus {
+    border: 1.5px solid #0275d8 !important;
+    box-shadow: 0 0 0 3px rgba(2, 117, 216, 0.1) !important;
+    outline: none;
+}
+
+/* Modern select stílusok */
+.modern-select {
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    padding: 12px 36px 12px 16px !important;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230275d8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 24px;
+    transition: all 0.3s ease;
+}
+
+.modern-select:focus {
+    border: 1.5px solid #0275d8 !important;
+    box-shadow: 0 0 0 3px rgba(2, 117, 216, 0.1);
+}
+
+/* Letiltott alapértelmezett opció stílusa */
+select option[disabled][selected] {
+    color: #9e9e9e;
+    background-color: #f5f5f5;
+}
+
+/* CSS kiegészítések */
+.ertesitendo-container {
+    position: relative;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.add-ertesitendo {
+    margin-top: 15px;
+    transition: all 0.3s ease;
+}
+
+.add-ertesitendo:hover {
+    transform: translateY(-2px);
+}
+
+.remove-ertesitendo {
+    height: 38px;
+    margin-top: 32px;
+}
+
+.ertesitendo-item {
+    position: relative;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.ertesitendo-item:not(:first-child) {
+    margin-top: 15px;
+}
+
+.bi-plus-circle {
+    font-size: 1.1em;
+}
+
+/* Alert stílusok */
+.triton-alert {
+    background: #fff;
+    border: 2px solid #0275d8;
+    border-radius: 12px;
+    color: #0b2c4d;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+}
+
+.triton-alert .bi {
+    font-size: 1.5rem;
+    color: #0275d8;
+}
+
+.triton-alert .btn-close {
+    filter: invert(25%) sepia(98%) saturate(2034%) hue-rotate(196deg) brightness(91%) contrast(96%);
+    opacity: 1;
+}
+
+.triton-alert .btn-close:hover {
+    opacity: 0.75;
+}
+
+@keyframes shine {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Reszponzív Beállítások */
+@media (max-width: 768px) {
+    .fejlec {
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+
+    .logo-filter {
+        max-height: 130px !important;
+    }
+
+    .triton-btn {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .eltunik {
+        display: none !important;
+    }
+
+    .inner-card {
+        margin: 0px 0px 70px 0px;
+    }
+
+    .card-0 {
+        margin-top: 0;
+        margin-bottom: 100px;
+    }
+}

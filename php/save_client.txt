@@ -1,0 +1,247 @@
+<?php
+session_start();
+error_log("SESSION: " . print_r($_SESSION, true));
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    die('Hozzáférés megtagadva! Admin jogosultság szükséges!');
+}
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('log_errors', 1);
+ini_set('error_log', 'php_errors.log');
+
+$servername = "127.0.0.1";
+$username = "root";
+$password = "";
+$dbname = "szolgaltatasiadatlap";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    $_SESSION['error'] = "Adatbázis kapcsolódási hiba: " . $conn->connect_error;
+    session_write_close();
+    header("Location: list.php");
+    exit();
+}
+$conn->set_charset("utf8mb4");
+$conn->autocommit(false); // Tranzakció kezdete
+
+try {
+    if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+        throw new Exception("Csak POST kérések fogadhatóak.");
+    }
+
+    if (!isset($_POST['ugyfel_id']) || !is_numeric($_POST['ugyfel_id'])) {
+        throw new Exception("Érvénytelen ügyfél ID.");
+    }
+    $ugyfel_id = intval($_POST['ugyfel_id']);
+    $is_ceges = isset($_POST['ceges_szerzodes']) && $_POST['ceges_szerzodes'] === 'igen';
+
+    // Üzenetek kezelése
+    if (isset($_SESSION['error'])) {
+        echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
+        unset($_SESSION['error']);
+    }
+    if (isset($_SESSION['success'])) {
+        echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
+        unset($_SESSION['success']);
+    }
+
+    // Jelenlegi ceg_id lekérdezése
+    $stmt = $conn->prepare("SELECT ceg_id FROM ugyfelek WHERE ugyfel_id = ?");
+    $stmt->bind_param('i', $ugyfel_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $ugyfel = $result->fetch_assoc();
+    $current_ceg_id = $ugyfel['ceg_id'] ?? null;
+    $stmt->close();
+
+    // Céges adatok kezelése
+    if ($is_ceges) {
+        $adoszam = preg_replace('/\s+/', '', $_POST['adoszam']);
+
+        if (!empty($current_ceg_id)) {
+            // Ellenőrizzük, hogy az új adószám egyedi-e (ha változott)
+            $check_current = $conn->prepare("SELECT adoszam FROM cegek WHERE ceg_id = ?");
+            $check_current->bind_param('i', $current_ceg_id);
+            $check_current->execute();
+            $current_adoszam = $check_current->get_result()->fetch_assoc()['adoszam'];
+            $check_current->close();
+
+            $current_adoszam_clean = preg_replace('/\s+/', '', $current_adoszam);
+            if ($adoszam !== $current_adoszam_clean) {
+                $check_adoszam = $conn->prepare("SELECT ceg_id FROM cegek WHERE adoszam = ?");
+                $check_adoszam->bind_param('s', $adoszam);
+                $check_adoszam->execute();
+                if ($check_adoszam->get_result()->num_rows > 0) {
+                    throw new Exception("Ez az adószám már létezik!");
+                }
+                $check_adoszam->close();
+            }
+
+            // Cég frissítése
+            $stmt = $conn->prepare("UPDATE cegek SET adoszam=?, cegjegyzek_szam=?, bankszamla_szam=? WHERE ceg_id=?");
+            $stmt->bind_param('sssi', $adoszam, $_POST['cegjegyzek_szam'], $_POST['bankszamla_szam'], $current_ceg_id);
+            if (!$stmt->execute()) {
+                throw new Exception("Cég frissítése sikertelen: " . $stmt->error);
+            }
+            $new_ceg_id = $current_ceg_id;
+        } else {
+            // Új cég létrehozása
+            $check_adoszam = $conn->prepare("SELECT ceg_id FROM cegek WHERE adoszam = ?");
+            $check_adoszam->bind_param('s', $adoszam);
+            $check_adoszam->execute();
+            if ($check_adoszam->get_result()->num_rows > 0) {
+                throw new Exception("Ez az adószám már létezik!");
+            }
+            $check_adoszam->close();
+
+            $stmt = $conn->prepare("INSERT INTO cegek (adoszam, cegjegyzek_szam, bankszamla_szam) VALUES (?, ?, ?)");
+            $stmt->bind_param('sss', $adoszam, $_POST['cegjegyzek_szam'], $_POST['bankszamla_szam']);
+            if (!$stmt->execute()) {
+                throw new Exception("Cég létrehozása sikertelen: " . $stmt->error);
+            }
+            $new_ceg_id = $stmt->insert_id;
+        }
+        $stmt->close();
+
+        // Ügyfél ceg_id frissítése
+        $stmt = $conn->prepare("UPDATE ugyfelek SET ceg_id=? WHERE ugyfel_id=?");
+        $stmt->bind_param('ii', $new_ceg_id, $ugyfel_id);
+        if (!$stmt->execute()) {
+            throw new Exception("Cég ID frissítése sikertelen");
+        }
+        $stmt->close();
+    } else {
+        // Ha a céges jelölő nincs bepipálva, töröljük a kapcsolatot
+        if (!empty($current_ceg_id)) {
+            $stmt = $conn->prepare("DELETE FROM cegek WHERE ceg_id=?");
+            $stmt->bind_param('i', $current_ceg_id);
+            if (!$stmt->execute()) {
+                throw new Exception("Cég törlése sikertelen");
+            }
+            $stmt->close();
+        }
+
+        $stmt = $conn->prepare("UPDATE ugyfelek SET ceg_id=NULL WHERE ugyfel_id=?");
+        $stmt->bind_param('i', $ugyfel_id);
+        if (!$stmt->execute()) {
+            throw new Exception("Cég ID nullázása sikertelen");
+        }
+        $stmt->close();
+    }
+
+    // Ügyfél adatok frissítése
+    $ugyfel_kod = $_POST['ugyfel_kod'] ?? ''; // Hiányzó változó hozzáadva
+    $stmt = $conn->prepare("
+        UPDATE ugyfelek 
+        SET 
+            szerzodo_neve = ?, 
+            anyja_neve = ?, 
+            szig_szam = ?, 
+            cime = ?, 
+            telefon = ?, 
+            email = ?, 
+            riasztokozpont_tipusa = ?, 
+            telepito_nev = ?, 
+            telepito_telefonszam = ?, 
+            kutya = ?, 
+            kapu_kulcs = ?, 
+            megjegyzes = ?,
+            ugyfel_kod = ? 
+        WHERE ugyfel_id = ?
+    ");
+    $stmt->bind_param(
+        'sssssssssssssi',
+        $_POST['szerzodo_neve'],
+        $_POST['anyja_neve'],
+        $_POST['szig_szam'],
+        $_POST['cime'],
+        $_POST['telefon'],
+        $_POST['email'],
+        $_POST['riasztokozpont_tipusa'],
+        $_POST['telepito_nev'],
+        $_POST['telepito_telefonszam'],
+        $_POST['kutya'],
+        $_POST['kapu_kulcs'],
+        $_POST['megjegyzes'],
+        $ugyfel_kod,
+        $ugyfel_id
+    );
+    if (!$stmt->execute()) {
+        throw new Exception("Ügyfél frissítése sikertelen: " . $stmt->error);
+    }
+    $stmt->close();
+
+    // Számlázási adatok frissítése
+    $stmt = $conn->prepare("
+        UPDATE szamlazasi_adatok 
+        SET 
+            szamlazo_nev = ?, 
+            szamlazo_cim = ?, 
+            postazasi_cim = ? 
+        WHERE ugyfel_id = ?
+    ");
+    $stmt->bind_param(
+        'sssi',
+        $_POST['szamlazo_nev'],
+        $_POST['szamlazo_cim'],
+        $_POST['postazasi_cim'],
+        $ugyfel_id
+    );
+    if (!$stmt->execute()) {
+        throw new Exception("Számlázási adatok frissítése sikertelen: " . $stmt->error);
+    }
+    $stmt->close();
+
+    // Fizetési adatok frissítése
+    $stmt = $conn->prepare("
+        UPDATE fizetesek 
+        SET 
+            fizetes_gyakorisag = ?, 
+            fizetes_mod = ? 
+        WHERE ugyfel_id = ?
+    ");
+    $stmt->bind_param(
+        'ssi',
+        $_POST['fizetes_gyakorisag'],
+        $_POST['fizetes_mod'],
+        $ugyfel_id
+    );
+    if (!$stmt->execute()) {
+        throw new Exception("Fizetési adatok frissítése sikertelen: " . $stmt->error);
+    }
+    $stmt->close();
+
+    // Jelszavak frissítése
+    if (!empty($_POST['jelszo'])) {
+        $stmt = $conn->prepare("
+            UPDATE jelszavak 
+            SET 
+                jelszo = ?, 
+                vendeg_jelszo = ? 
+            WHERE ugyfel_id = ?
+        ");
+        $stmt->bind_param(
+            'ssi',
+            $_POST['jelszo'],
+            $_POST['vendeg_jelszo'],
+            $ugyfel_id
+        );
+        if (!$stmt->execute()) {
+            throw new Exception("Jelszó frissítése sikertelen: " . $stmt->error);
+        }
+        $stmt->close();
+    }
+
+    // Tranzakció véglegesítése
+    $conn->commit();
+    $_SESSION['success'] = "Adatok sikeresen frissítve!";
+    header("Location: edit.php?id=" . $ugyfel_id);
+    exit();
+} catch (Exception $e) {
+    $conn->rollback();
+    $_SESSION['error'] = "Hiba történt: " . $e->getMessage();
+    header("Location: edit.php?id=" . $ugyfel_id);
+    exit();
+} finally {
+    $conn->close();
+}
